@@ -1,4 +1,4 @@
-import { Modal, Notice } from "obsidian";
+import { Modal, Notice, Platform } from "obsidian";
 import type QRNoteTransferPlugin from "./main";
 import { parsePayload, reassemblePayloads } from "./chunking";
 import { decodePackage, sha256 } from "./encoding";
@@ -18,6 +18,7 @@ export class ImportModal extends Modal {
   private video!: HTMLVideoElement;
   private textarea!: HTMLTextAreaElement;
   private busy = false;
+  private imageBusy = false;
 
   constructor(plugin: QRNoteTransferPlugin, private manualOnly = false) { super(plugin.app); this.plugin = plugin; }
   private plugin: QRNoteTransferPlugin;
@@ -37,6 +38,20 @@ export class ImportModal extends Modal {
       const stop = cameraActions.createEl("button", { text: "Stop scanner" });
       start.onclick = () => void this.startCamera();
       stop.onclick = () => this.scanner.stop();
+
+      const imageInput = contentEl.createEl("input", {
+        cls: "obqr-camera-input",
+        attr: { type: "file", accept: "image/*", capture: "environment" }
+      });
+      const capture = cameraActions.createEl("button", {
+        text: Platform.isMobileApp ? "Scan QR with camera" : "Scan QR from image"
+      });
+      capture.onclick = () => imageInput.click();
+      imageInput.onchange = () => {
+        const file = imageInput.files?.[0];
+        imageInput.value = "";
+        if (file) void this.scanImage(file, capture);
+      };
     }
 
     contentEl.createEl("label", { text: "Paste one or more QR payload strings (one per line):" });
@@ -53,6 +68,23 @@ export class ImportModal extends Modal {
     this.clearError();
     try { await this.scanner.start(this.video, text => this.collect(text, true), message => this.setError(message)); }
     catch (error) { this.setError(error instanceof Error ? error.message : String(error)); }
+  }
+
+  private async scanImage(file: File, button: HTMLButtonElement): Promise<void> {
+    if (this.imageBusy) return;
+    this.imageBusy = true;
+    button.disabled = true;
+    this.clearError();
+    try {
+      const text = await this.scanner.decodeImage(file);
+      this.collect(text, true);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      this.setError(`No QR code could be read from that photo. Try filling the frame and holding the camera steady. (${detail})`);
+    } finally {
+      this.imageBusy = false;
+      button.disabled = false;
+    }
   }
 
   private importPasted(): void {

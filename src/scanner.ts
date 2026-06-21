@@ -22,6 +22,17 @@ export class WebcamScanner {
     }
   }
 
+  async decodeImage(file: File): Promise<string> {
+    const reader = new BrowserQRCodeReader();
+    const url = URL.createObjectURL(file);
+    try {
+      const result = await reader.decodeFromImageUrl(url);
+      return result.getText();
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }
+
   stop(): void {
     this.controls?.stop();
     this.controls = null;

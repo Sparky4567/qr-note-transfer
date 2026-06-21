@@ -8,4 +8,5 @@
 .obqr-auto-row label { align-items: center; display: flex; gap: 6px; }
 .obqr-warning, .obqr-error { color: var(--text-error); }
 .obqr-video { background: #111; display: block; margin: 10px auto; max-height: 360px; max-width: 100%; width: 520px; }
+.obqr-camera-input { display: none; }
 .obqr-paste { box-sizing: border-box; display: block; font-family: var(--font-monospace); height: 150px; margin-top: 8px; resize: vertical; width: 100%; }
