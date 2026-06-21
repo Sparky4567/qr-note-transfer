@@ -1,0 +1,12 @@
+.obqr-export-modal, .obqr-import-modal { max-width: 720px; }
+.obqr-meta { color: var(--text-muted); margin-bottom: 4px; overflow-wrap: anywhere; }
+.obqr-counter { font-size: 1.1em; font-weight: 600; margin: 14px 0 8px; text-align: center; }
+.obqr-qr-wrap { align-items: center; background: white; display: flex; justify-content: center; margin: 0 auto 12px; max-width: 100%; overflow: auto; padding: 8px; width: fit-content; }
+.obqr-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.obqr-auto-row { align-items: center; display: flex; gap: 16px; justify-content: center; }
+.obqr-auto-row label { align-items: center; display: flex; gap: 6px; }
+.obqr-warning, .obqr-error { color: var(--text-error); }
+.obqr-status { font-size: 1.1em; font-weight: 600; margin-bottom: 6px; }
+.obqr-received { color: var(--text-muted); margin-bottom: 10px; overflow-wrap: anywhere; }
+.obqr-video { background: #111; display: block; margin: 10px auto; max-height: 360px; max-width: 100%; width: 520px; }
+.obqr-paste { box-sizing: border-box; display: block; font-family: var(--font-monospace); height: 150px; margin-top: 8px; resize: vertical; width: 100%; }

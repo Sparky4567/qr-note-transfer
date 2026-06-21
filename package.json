@@ -1,0 +1,23 @@
+{
+  "name": "obsidian-qr-note-transfer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc --noEmit && node esbuild.config.mjs production"
+  },
+  "dependencies": {
+    "@zxing/browser": "^0.1.5",
+    "pako": "^2.1.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pako": "^2.0.3",
+    "@types/qrcode": "^1.5.5",
+    "builtin-modules": "^4.0.0",
+    "esbuild": "^0.24.0",
+    "obsidian": "latest",
+    "typescript": "^5.7.2"
+  }
+}
