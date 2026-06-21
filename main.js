@@ -38569,11 +38569,43 @@ var WebcamScanner = class {
     const reader = new BrowserQRCodeReader2();
     const url = URL.createObjectURL(file);
     try {
-      const result = await reader.decodeFromImageUrl(url);
-      return result.getText();
+      const image = await this.loadImage(url);
+      for (const maxSide of [1600, 2400]) {
+        const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+        const width = Math.max(1, Math.round(image.naturalWidth * scale));
+        const height = Math.max(1, Math.round(image.naturalHeight * scale));
+        for (const rotation of [0, 90, 180, 270]) {
+          const canvas = this.drawImage(image, width, height, rotation);
+          try {
+            return reader.decodeFromCanvas(canvas).getText();
+          } catch (e) {
+          }
+        }
+      }
+      throw new Error("QR code not found in image");
     } finally {
       URL.revokeObjectURL(url);
     }
+  }
+  loadImage(url) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error("The captured image could not be loaded"));
+      image.src = url;
+    });
+  }
+  drawImage(image, width, height, rotation) {
+    const swapSides = rotation === 90 || rotation === 270;
+    const canvas = document.createElement("canvas");
+    canvas.width = swapSides ? height : width;
+    canvas.height = swapSides ? width : height;
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    if (!context) throw new Error("Image canvas is unavailable");
+    context.translate(canvas.width / 2, canvas.height / 2);
+    context.rotate(rotation * Math.PI / 180);
+    context.drawImage(image, -width / 2, -height / 2, width, height);
+    return canvas;
   }
   stop() {
     var _a2;
