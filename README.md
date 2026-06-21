@@ -1,10 +1,10 @@
 # QR Note Transfer
 
-QR Note Transfer is a desktop Obsidian community plugin that transfers the active Markdown note without a server. It gzip-compresses a versioned JSON package, Base64URL-encodes it, splits it into QR-sized chunks, and protects the complete encoded payload with SHA-256.
+QR Note Transfer is an Obsidian community plugin for desktop and mobile that transfers the active Markdown note without a server. It gzip-compresses a versioned JSON package, Base64URL-encodes it, splits it into QR-sized chunks, and protects the complete encoded payload with SHA-256.
 
 ## Development installation
 
-Requirements: Node.js 18 or newer and a desktop Obsidian installation.
+Requirements for building: Node.js 18 or newer. The built plugin runs in Obsidian on desktop, Android, and iOS.
 
 ```bash
 npm install
@@ -45,7 +45,7 @@ Settings control chunk size, QR display size, auto-play interval, path preservat
 - Very large notes may produce many QR codes.
 - QR transfer is slower than file sync, Git, USB, or Obsidian Sync.
 - QR codes are visible to anyone who can see the screen.
-- v1 transfers one Markdown note at a time and requires desktop Obsidian for webcam scanning.
+- v1 transfers one Markdown note at a time. Camera scanning depends on camera permission being granted to Obsidian; pasted payload import remains available when camera access is unavailable.
 
 ## Security notes
 
@@ -59,5 +59,5 @@ Imported Markdown is saved as plain text; the plugin does not execute it. Paths 
 - Password encryption
 - Animated QR transfer mode
 - Printable QR sheet export
-- Mobile camera improvements
+- Camera scanning reliability improvements
 - Conflict resolution UI
